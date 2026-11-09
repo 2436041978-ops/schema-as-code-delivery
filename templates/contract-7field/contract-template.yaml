@@ -1,0 +1,18 @@
+# ── Schema-As-Code 交付件元数据 ──
+# artifact_id:      TPL-CONTRACT-v1.0.0
+# artifact_type:    模版库·契约模板（Contract 阶段唯一源文件）
+# applicable_products: 全部 AI 生成界面（由填写者在 applicable_products 字段内收敛范围）
+# output_type:      YAML 契约（四种编译产物的信源）
+# mapped_patterns:  由 intent_id 关联的漂移模式决定（ERR / PRO / BND / ACT / ALR / INF）
+# track_theme:      契约主体（④）；消费与验证贯穿 ⑤⑥⑦⑧
+# source_article:   https://www.yuque.com/u222739/why7ts/cby8rkiahhfio0cb
+
+# 7 个字段全部冻结 v1.0.0：字段名、含义、顺序不要动。机器靠它们做格式校验和编译。
+
+intent_id: ""            # 契约唯一标识，建议 contract.<漂移模式>.<语义主题>
+description: ""          # 这条契约在管什么（现象 + 根因 + 后果，一句话）
+version: ""              # 语义化版本号：语义不变更 patch / 令牌增删更 minor / 边界变化更 major
+semantic_domain: ""      # 所属语义域（一个契约只管一个域，跨界拆成多条）
+applicable_products: []  # 适用的产品/范围（宁窄勿宽，从最高频高危场景开始）
+semantic_tokens: {}      # 引用的语义令牌（只能引用字典已注册项，禁止自创）
+immutable_boundaries: [] # 不可突破的边界（负向约束，每条可机器判定，无"尽量/建议"类措辞）
