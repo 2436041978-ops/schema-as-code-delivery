@@ -1,0 +1,33 @@
+# 完整示例：ERR-001 错误分级契约（对应漂移模式 ERR-001 后果差异未分级）
+# 漂移现场：LLM 生成告警/错误文案时，Critical 被同义词降级为"严重"
+
+intent_id: contract.err001.error_severity
+description: 错误状态必须按用户后果分级表达，禁止同义词降级
+version: 1.0.0
+semantic_domain: feedback.error_state
+applicable_products: [ai_assistant, web_console]
+
+semantic_tokens:
+  error_severity:
+    fatal:                # 已注册：用户数据/进度损失，必须立即处理
+      description: 不可恢复，用户必须立即处理
+      visual_mapping: { color_token: "color.feedback.fatal", motion_token: "motion.none", icon_token: "icon.error.blocking" }
+      user_action: 提供损失补救路径（如导出已编辑内容）
+    transient:            # 已注册：稍候自动恢复，无需用户操作
+      description: 暂时性故障，稍后自动恢复
+      visual_mapping: { color_token: "color.feedback.transient", motion_token: "motion.pulse", icon_token: "icon.error.passive" }
+      user_action: 告知等待时长，禁止弹窗阻断
+    retryable:            # 已注册：操作失败，用户重试可成功
+      description: 操作未完成，用户重试即可
+      visual_mapping: { color_token: "color.feedback.retryable", motion_token: "motion.none", icon_token: "icon.error.action" }
+      user_action: 提供一键重试
+    degraded:             # 已注册：功能降格可用，核心路径不断
+      description: 部分功能暂不可用，其余正常
+      visual_mapping: { color_token: "color.feedback.degraded", motion_token: "motion.none", icon_token: "icon.error.degraded" }
+      user_action: 说明受影响范围
+
+immutable_boundaries:
+  - 禁止将 fatal 级状态以"出了点小问题""稍后再试"等中性/降级文案表达
+  - 禁止跨层绑定：fatal 不得使用成功态或提示态的颜色、图标、动效
+  - 禁止缺少 user_action 的错误状态（机器无法回答"用户该做什么"即违规）
+  - 禁止在同一份界面中混用两个 severity 令牌的视觉映射
